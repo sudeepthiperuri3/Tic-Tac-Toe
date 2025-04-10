@@ -1,32 +1,36 @@
-interface PlayerProps {
+export interface PlayerProps {
   initialName: string;
   symbol: string;
   isActive: boolean;
+  onChangeName:(symbol: string, name: string) => void;
 }
 
 import { useState } from "react";
 
-export default function Player({ initialName, symbol ,isActive}: PlayerProps) {
+export default function Player({ initialName, symbol ,isActive,onChangeName}: PlayerProps) {
   const [playerName, setPlayerName] = useState(initialName);
   const [isEditing, setisEditing] = useState(false);
 
   function handleEditClick(): void {
-    //   setisEditing(isEditing ? false : true);
-    //  setisEditing(!isEditing );
+  
     setisEditing((editing) => !editing);
-  }
 
-  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+    if (isEditing)
+      onChangeName(symbol, playerName);
+  }
+  
+
+  function handleChange(event: React.ChangeEvent<HTMLInputElement>):void {
     setPlayerName(event.target.value);
   }
 
   let editiablePlayerName = <span className="player-name">{playerName}</span>;
-  // let btnCaption = "Edit";
+
   if (isEditing) {
     editiablePlayerName = (
       <input type="text" required value={playerName} onChange={handleChange} />
     );
-    //    let btnCaption = "Save";
+  
   }
 
   return (
